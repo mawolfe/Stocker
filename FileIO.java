@@ -1,11 +1,12 @@
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import java.io.FileReader;
 import java.io.PrintStream;
+import java.io.BufferedReader;
 
 
 public class FileIO {
@@ -13,20 +14,19 @@ public class FileIO {
     protected void readTextFile(File aFile, StockLinkedList sLL) {
 
         //setProgBar("Reading Text file", 0);
-
+/*
     	try {
 
     		BufferedReader input =  new BufferedReader(new FileReader(aFile));
           
     		try {
 	            String line = null; //not declared within while loop
-	            /*
-	            * readLine is a bit quirky :
-	            * it returns the content of a line MINUS the newline.
-	            * it returns null only for the END of the stream.
-	            * it returns an empty String if two newlines appear in a row.
-	            */
-	           
+	            
+	            // readLine is a bit quirky :
+	            // it returns the content of a line MINUS the newline.
+	            // it returns null only for the END of the stream.
+	            // it returns an empty String if two newlines appear in a row.
+	            
 	            System.out.println("* ------ START INPUT ------- *");
 	           
 	            while (( line = input.readLine()) != null) {
@@ -41,6 +41,7 @@ public class FileIO {
     	} catch (FileNotFoundException fnfe ) {
     		fnfe.printStackTrace();
         }
+*/
     }
     
  public void writeToFile(String filename, String writeThis) {
