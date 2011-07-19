@@ -28,7 +28,7 @@ public class FetchData {
                 if (inputLine.contains(beforeLastTrade)) {
                 	String LastTrade = inputLine.substring(inputLine.indexOf(beforeLastTrade)+beforeLastTrade.length(), inputLine.indexOf(afterLastTrade));
                     
-                    System.out.println("Current Price: " + LastTrade);
+                    //System.out.print("Current Price: " + LastTrade);
                     return LastTrade;
                 }
             }
@@ -208,5 +208,4 @@ public class FetchData {
 
 */        	 
 }
-
 

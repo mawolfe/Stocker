@@ -1,13 +1,15 @@
 public class StockNode {
 
 	private String tickerSymbol, lastTrade;
-    private double threshLow, threshHigh;    
+    private double threshLow, threshHigh; 
+    private int instanceNum;
     private StockNode next; 
     
-    public StockNode(String _tickerSymbol, double _threshLow, double _threshHigh, StockNode _next) {
+    public StockNode(String _tickerSymbol, double _threshLow, double _threshHigh, int _instanceNum, StockNode _next) {
         this.tickerSymbol = _tickerSymbol;
         this.threshLow    = _threshLow;
         this.threshHigh   = _threshHigh;
+        this.instanceNum  = _instanceNum;
         this.next = _next;            
     }
 
@@ -16,12 +18,14 @@ public class StockNode {
     public String getTickerSymbol() { return tickerSymbol;}    
     public String getLastTrade()    { return lastTrade;}   
     public double getThreshLow()    { return threshLow;}
-    public double getThreshHigh()    { return threshHigh;}
+    public double getThreshHigh()   { return threshHigh;}
+    public int getInstanceNum()     { return instanceNum;}
             
     public void setTickerSymbol(String in) { tickerSymbol = in; }    
     public void setLastTrade(String in)    { lastTrade = in;    }
     public void setThreshLow(double in)    { threshLow = in;    }
     public void setThreshHigh(double in)   { threshHigh = in;   }
+    public void setInstanceNum(int in)     { instanceNum = in;   }
 
 /*
     public String toString() {
