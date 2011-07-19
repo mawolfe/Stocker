@@ -1,3 +1,5 @@
+// Obtain the system's OS
+
 public class getOS {
 
     public static void main(String[] arg) {
