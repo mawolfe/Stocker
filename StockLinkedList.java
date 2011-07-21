@@ -17,14 +17,18 @@ public class StockLinkedList {
         // if ticker symbol does exist, flip its sign 
     	} else {
     		
-    		if (findTickerSymb(tickerSymbol).getInstanceNum() > 0) {
+    		StockNode currNode = findTickerSymb(tickerSymbol); 
+    		currNode.setInstanceNum(findTickerSymb(tickerSymbol).getInstanceNum()*-1); 
+
+    		currNode.setThreshLow(threshLow); 
+    		currNode.setThreshHigh(threshHigh); 
+    		currNode.setEmailed(false);
+
+    		if (findTickerSymb(tickerSymbol).getInstanceNum() < 0) {
         		System.out.println(tickerSymbol + " deactivated.");    	
     		} else {
     			System.out.println(tickerSymbol + " reactivated.");
-    		}
-    		
-    		findTickerSymb(tickerSymbol).setInstanceNum(findTickerSymb(tickerSymbol).getInstanceNum()*-1); 
-    		
+    		}    		
     	}
     	
     }
