@@ -171,10 +171,24 @@ public class runPeriodicTask {
 
 		if (Double.parseDouble(_lastTrade) < _stockNode.getThreshLow()) {
 			System.out.println("*** " + _stockNode.getTickerSymbol() + " is lower than low threshold. ***");
+
 			// send email
+			if (!_stockNode.getEmailed()) {		// if it hasn't been emailed
+				System.out.println("send email...");
+				_stockNode.setEmailed(true);	// set emailed in node to true
+			}
+		
 		} else if (Double.parseDouble(_lastTrade) > _stockNode.getThreshHigh()) {
 			System.out.println("*** " + _stockNode.getTickerSymbol() + " is higher than high threshold. ***");
+
 			// send email
+			if (!_stockNode.getEmailed()) {		// if it hasn't been emailed
+				System.out.println("send email...");
+				_stockNode.setEmailed(true);	// set emailed in node to true
+			}
+
+		} else {
+			_stockNode.setEmailed(false);	// set emailed in node to false
 		}
 
 	}
