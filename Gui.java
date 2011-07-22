@@ -28,6 +28,7 @@ public class Gui extends JFrame
 	public JTextField price;
 	
 	runPeriodicTask rpt;
+	Email email;
 	
 	public Gui()
 	{
@@ -49,7 +50,7 @@ public class Gui extends JFrame
 				public void actionPerformed(ActionEvent event)
 				{
 					//add action events
-					System.out.println("Start clicked.");
+					System.out.println("\nStart clicked.");
 										
 					System.out.println("ticker symbol = " + fields[0].getText());
 					System.out.println("refresh rate = " + fields[1].getText());
@@ -72,7 +73,7 @@ public class Gui extends JFrame
 				public void actionPerformed(ActionEvent event)
 				{
 					//add action events
-					System.out.println("Stop clicked.");
+					System.out.println("\nStop clicked.");
 					rpt.quit=true;
 				}
 			}
@@ -87,7 +88,7 @@ public class Gui extends JFrame
 				public void actionPerformed(ActionEvent event)
 				{
 					//add action events
-					System.out.println("Graph clicked.");
+					System.out.println("\nGraph clicked.");
 					
 					System.out.println("ticker symbol = " + fields[0].getText());
 					
@@ -106,7 +107,23 @@ public class Gui extends JFrame
 				public void actionPerformed(ActionEvent event)
 				{
 					//add action events
-					System.out.println("Email clicked.");
+					System.out.println("\nEmail clicked.");
+					
+					System.out.println("ticker symbol = " + fields[0].getText());
+					System.out.println("refresh rate = " + fields[1].getText());
+					System.out.println("high = " + fields[2].getText());
+					System.out.println("low = " + fields[3].getText());
+					
+					//String to[] = null; 
+					//		to [0] = (fields[4].getText());
+					String to = fields[4].getText();
+					String from = "Stocker@email.com";
+					String subject = "Email Button Pushed";
+					//setTickerandPrice is called by runPeriodicTask to update the price field
+					String message = "Ticker Symbol: " + fields[0].getText();
+					
+					email = new Email(to , from, subject, message);					
+					
 				}
 			}
 		);
@@ -141,19 +158,24 @@ public class Gui extends JFrame
 		textJPanel = new JPanel();
 		textJPanel.setLayout(new GridLayout(fields.length, 1));
 		
-		fields[0] = new JTextField("Stock Name");
+		//fields[0] = new JTextField("Stock Name");
+		fields[0] = new JTextField(10);
 		textJPanel.add(fields[0]);
 		
-		fields[1] = new JTextField("Refresh Rate");
+		//fields[1] = new JTextField("Refresh Rate");
+		fields[1] = new JTextField(10);
 		textJPanel.add(fields[1]);
 		
-		fields[2] = new JTextField("High Value");
+		//fields[2] = new JTextField("High Value");
+		fields[2] = new JTextField(10);
 		textJPanel.add(fields[2]);
 		
-		fields[3] = new JTextField("Low Value");
+		//fields[3] = new JTextField("Low Value");
+		fields[3] = new JTextField(10);
 		textJPanel.add(fields[3]);
 		
-		fields[4] = new JTextField("Email Address", 10);
+		//fields[4] = new JTextField("Email Address", 10);
+		fields[4] = new JTextField(10);
 		textJPanel.add(fields[4]);
 		
 		add( textJPanel, BorderLayout.CENTER);

@@ -12,6 +12,8 @@ public class getOS {
     		System.out.println("it's windows");
     	} else if (myOS.equals("linux")) {
     		System.out.println("it's linux");
+    	} else if (myOS.equals("mac")){
+    		System.out.println("it's Mac OS");
     	}
     	
     }

@@ -59,7 +59,10 @@ public class runPeriodicTask {
 	        } else if (myOS.equals("linux")) {
 	    	    timer.schedule(new periodicMethodLinux(), 0, //initial delay
 	    		        refreshRate * 1000); //subsequent rate
-	        } else {
+	        } else if (myOS.equals("mac")){
+	        	timer.schedule(new periodicMethodMac(), 0, //initial delay, 
+	        			refreshRate * 1000);
+	        }	else {
 	        	System.out.println(myOS + " operating system not supported.");
 	        }
 			
@@ -70,8 +73,47 @@ public class runPeriodicTask {
 				quit=true;
 			}
 		}
-	}
+	} //runPeriodicTask
 
+	class periodicMethodMac extends TimerTask {
+	    
+		int cnt = 0;
+		
+		public void run() {
+		
+			java.util.Date date = new java.util.Date();
+
+			StockNode tempNode;
+			String tempLastTrade="";
+ 		
+			if (debug) {System.out.print("quit = " + quit);}			
+			if (quit) {System.out.print("Stopped.");	System.exit(0);}
+			
+			for (int i=0; i<stockList.getNodeCount(); i++) {
+				
+				tempNode = stockList.getNodeAt(i);
+				
+				if (tempNode.getInstanceNum()>0) {
+
+					//System.out.print(cnt + " ");
+					
+					tempLastTrade = fetcher.getLastTrade(tempNode.getTickerSymbol());
+	
+					gui.setTickerandPrice(tempNode.getTickerSymbol(), tempLastTrade);			
+					System.out.print("\n" + new Timestamp(date.getTime()) + ", " + 
+											tempNode.getTickerSymbol()+": " + tempLastTrade + 
+											" [" + tempNode.getInstanceNum() + "]");		// instance number
+					
+					fio.writeToFile(
+							"//users//matthewwolfe//Documents" + tempNode.getTickerSymbol() + ".txt", 
+							tempLastTrade);		
+					
+					testThresholds(tempNode, tempLastTrade);
+				}
+			}
+			cnt++;			
+		}
+	} // periodicMethodMac
 	
 	class periodicMethodLinux extends TimerTask {
     
@@ -111,7 +153,7 @@ public class runPeriodicTask {
 			}
 			cnt++;			
 		}
-	}
+	} // periodicMethodLinux
 
 	class periodicMethodWindows extends TimerTask {
 	    
@@ -165,7 +207,7 @@ public class runPeriodicTask {
 		 	*/			
 
 		}
-	}
+	} // periodicMethodWindows
 
 	public void testThresholds(StockNode _stockNode, String _lastTrade) {
 
@@ -177,7 +219,7 @@ public class runPeriodicTask {
 			// send email
 		}
 
-	}
+	} // testThresholds
 
 	public void disableTickerSymbol(String tickerSymb) {
 		
@@ -199,7 +241,7 @@ public class runPeriodicTask {
 		} else {
 			System.out.println(tickerSymb + " is not a ticker symbol being stocked.");
 		}
-	}
+	} // disableTickerSymbol
 
 	
 	/**
@@ -219,7 +261,7 @@ System.out.println("instance num = " + instanceNum);
 System.out.println("instance num = " + instanceNum);			
 			return stockList.findTickerSymb(tickerSymb).getInstanceNum();		
 		}
-	}
+	} // gitInstanceNum
 	
 	/*
   	public static void main(String args[]) {
