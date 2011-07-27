@@ -29,13 +29,5 @@ public class StockNode {
     public void setThreshLow(double in)    { threshLow = in;    }
     public void setThreshHigh(double in)   { threshHigh = in;   }
     public void setInstanceNum(int in)     { instanceNum = in;  }
-    public void setEmailed(boolean in)     { emailed = in;      }
-
-/*
-    public String toString() {
- 
-        return tickerSymbol + " " + lastTrade + " " + threshLow + " " + threshHigh;
-    }
-*/    
-    
+    public void setEmailed(boolean in)     { emailed = in;      }  
 }

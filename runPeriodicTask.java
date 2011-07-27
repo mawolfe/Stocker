@@ -10,6 +10,10 @@ import javax.swing.JFrame;
 
 public class runPeriodicTask {
 
+	private boolean canDrawChart=false;
+	public static drawChart stockChart;
+
+	public static String pathName="";
 	public static boolean isRunning=false;
 	
 	public static Gui gui;
@@ -28,16 +32,9 @@ public class runPeriodicTask {
     public static void main(String[] arg) {
     	gui = new Gui();
     	gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	gui.setSize(300, 300); // (x,y)
+    	gui.setSize(350, 210); // (x,y)
     	gui.setVisible(true);    	
     }
-   
-//	public void init() {
-//        stockList.addStock("GOOG", 536.00, 536.10);	
-//        stockList.addStock("YHOO", 15.65, 15.75);
-//        stockList.addStock("MENT", 12.60, 12.65);
-//        
-//	}
 		
 	public runPeriodicTask(int refreshRate, String tickerSymbol, double hi, double lo) {
 		
@@ -53,18 +50,16 @@ public class runPeriodicTask {
 			isRunning = true;
 			
 			if (myOS.equals("windows")) {
-	    	    timer.schedule(new periodicMethodWindows(), 0, //initial delay
-	    		        refreshRate * 1000); //subsequent rate        	
-	        	
+				pathName = "C:\\PSU\\cs510_OpenSource\\";	        		        	
 	        } else if (myOS.equals("linux")) {
-	    	    timer.schedule(new periodicMethodLinux(), 0, //initial delay
-	    		        refreshRate * 1000); //subsequent rate
+	        	pathName = "//u//agospodn//cs510_OpenSource//";
 	        } else if (myOS.equals("mac")){
-	        	timer.schedule(new periodicMethodMac(), 0, //initial delay, 
-	        			refreshRate * 1000);
+				pathName = "//users//matthewwolfe//Documents//";	        					
 	        }	else {
 	        	System.out.println(myOS + " operating system not supported.");
 	        }
+			timer.schedule(new periodicMethod(), 0, //initial delay
+    		        refreshRate * 1000); //subsequent rate
 			
 		// if it's running, check if any stock ticker symbols are active, if not then quit
 		} else if (isRunning) {
@@ -73,89 +68,28 @@ public class runPeriodicTask {
 				quit=true;
 			}
 		}
-	} //runPeriodicTask
+	}
 
-	class periodicMethodMac extends TimerTask {
-	    
-		int cnt = 0;
+	public runPeriodicTask(String tickerSymbol, int buttonNum) {
 		
-		public void run() {
+		/* This is called when the runPeriodicTask has not already been instantiated (only by first clicking a button other than "Start"). 
+		 * 	The buttonNum is the code for the following buttons:
+		 *		2 - Remove
+		 *		5 - Draw Chart
+		 *  These methods check to see if the ticker symbol is valid, and since runPeriodicTask is not yet running, 
+		 *  the tickerSymbol is guaranteed not to be in and so a message is written to the console.	
+ 		 */
 		
-			java.util.Date date = new java.util.Date();
-
-			StockNode tempNode;
-			String tempLastTrade="";
- 		
-			if (debug) {System.out.print("quit = " + quit);}			
-			if (quit) {System.out.print("Stopped.");	System.exit(0);}
-			
-			for (int i=0; i<stockList.getNodeCount(); i++) {
-				
-				tempNode = stockList.getNodeAt(i);
-				
-				if (tempNode.getInstanceNum()>0) {
-
-					//System.out.print(cnt + " ");
-					
-					tempLastTrade = fetcher.getLastTrade(tempNode.getTickerSymbol());
+		if (buttonNum == 2) {
+			disableTickerSymbol(tickerSymbol);
+		} else if (buttonNum == 5) {
+				if (canDrawChart) {
+					drawChart(tickerSymbol);
+				} else {System.out.println("can't find chart library.\nDownload the library at:\n\thttp://www.java2s.com/Code/JavaDownload/jfreechart-1.0.0-rc1.zip");} 
+		}	
+	}
 	
-					gui.setTickerandPrice(tempNode.getTickerSymbol(), tempLastTrade);			
-					System.out.print("\n" + new Timestamp(date.getTime()) + ", " + 
-											tempNode.getTickerSymbol()+": " + tempLastTrade + 
-											" [" + tempNode.getInstanceNum() + "]");		// instance number
-					
-					fio.writeToFile(
-							"//users//matthewwolfe//Documents" + tempNode.getTickerSymbol() + ".txt", 
-							tempLastTrade);		
-					
-					testThresholds(tempNode, tempLastTrade);
-				}
-			}
-			cnt++;			
-		}
-	} // periodicMethodMac
-	
-	class periodicMethodLinux extends TimerTask {
-    
-		int cnt = 0;
-		
-		public void run() {
-		
-			java.util.Date date = new java.util.Date();
-
-			StockNode tempNode;
-			String tempLastTrade="";
- 		
-			if (debug) {System.out.print("quit = " + quit);}			
-			if (quit) {System.out.print("Stopped.");	System.exit(0);}
-			
-			for (int i=0; i<stockList.getNodeCount(); i++) {
-				
-				tempNode = stockList.getNodeAt(i);
-				
-				if (tempNode.getInstanceNum()>0) {
-
-					//System.out.print(cnt + " ");
-					
-					tempLastTrade = fetcher.getLastTrade(tempNode.getTickerSymbol());
-	
-					gui.setTickerandPrice(tempNode.getTickerSymbol(), tempLastTrade);			
-					System.out.print("\n" + new Timestamp(date.getTime()) + ", " + 
-											tempNode.getTickerSymbol()+": " + tempLastTrade + 
-											" [" + tempNode.getInstanceNum() + "]");		// instance number
-					
-					fio.writeToFile(
-							"//u//agospodn//cs510_OpenSource//" + tempNode.getTickerSymbol() + ".txt", 
-							tempLastTrade);		
-					
-					testThresholds(tempNode, tempLastTrade);
-				}
-			}
-			cnt++;			
-		}
-	} // periodicMethodLinux
-
-	class periodicMethodWindows extends TimerTask {
+	class periodicMethod extends TimerTask {
 	    
 		int cnt = 0;
 		
@@ -185,29 +119,15 @@ public class runPeriodicTask {
 											" [" + tempNode.getInstanceNum() + "]");		// instance number
 					
 					fio.writeToFile(
-							"C:\\PSU\\cs510_OpenSource\\" + tempNode.getTickerSymbol() + ".txt", 
+							pathName + tempNode.getTickerSymbol() + ".txt", 
 							tempLastTrade);				
 					
 					testThresholds(tempNode, tempLastTrade);
 				}
 			}
 			cnt++;
-			
-			/*
-			if (numWarningBeeps > 0) {
-				toolkit.beep();
-				System.out.println("Beep!");
-				numWarningBeeps--;
-			} else {
-				toolkit.beep();
-				System.out.println("Time's up!");
-				timer.cancel(); //Not necessary because we call System.exit
-				System.exit(0); //Stops the AWT thread (and everything else)
-			}
-		 	*/			
-
 		}
-	} // periodicMethodWindows
+	}
 
 	public void testThresholds(StockNode _stockNode, String _lastTrade) {
 
@@ -239,12 +159,19 @@ public class runPeriodicTask {
 		
 		// find the ticker symbol's node
 		StockNode disableNode = stockList.findTickerSymb(tickerSymb);
-		
+
 		// if the ticker symbol is found, multiply its instanceNum by -1 // 0 (inactive)
 		if (disableNode != null) {
 			
-			stockList.findTickerSymb(tickerSymb).setInstanceNum(stockList.findTickerSymb(tickerSymb).getInstanceNum()*-1);
-			System.out.println("Removed ticker symbol " + tickerSymb);
+    		StockNode currNode = stockList.findTickerSymb(tickerSymb); 
+			
+    		if (currNode.getInstanceNum() < 0) {
+    			System.out.println(tickerSymb + " is already inactive.");
+    		} else {    			
+    			// set to -1*instance number (deactivate)
+    			currNode.setInstanceNum(-1*Math.abs(currNode.getInstanceNum()));				
+    			System.out.println("Removed ticker symbol " + tickerSymb);
+			}			
 			
 			// if no nodes are active, quit
 			if (!stockList.HasActiveInstanceNum()) {
@@ -255,7 +182,7 @@ public class runPeriodicTask {
 		} else {
 			System.out.println(tickerSymb + " is not a ticker symbol being stocked.");
 		}
-	} // disableTickerSymbol
+	}
 
 	
 	/**
@@ -277,6 +204,21 @@ System.out.println("instance num = " + instanceNum);
 		}
 	}// gitInstanceNum
 	
+	public void drawChart(String tickerSymbol) {
+		
+		StockNode tempNode = stockList.findTickerSymb(tickerSymbol);
+		// if ticker symbol is in list, then draw chart 
+		if (tempNode != null) {		
+			System.out.println("tickerSymbol = " + tickerSymbol);
+			System.out.println("low = " + tempNode.getThreshLow());
+			System.out.println("high = " + tempNode.getThreshHigh());
+			
+			stockChart = new drawChart(tickerSymbol, pathName, tempNode.getThreshLow(), tempNode.getThreshHigh());
+		} else {		
+			System.out.println(tickerSymbol + " not found.");
+		}
+	}
+
 	/*
   	public static void main(String args[]) {
   		

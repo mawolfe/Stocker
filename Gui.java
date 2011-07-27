@@ -38,9 +38,9 @@ public class Gui extends JFrame
 		setLayout(layout);
 		
 		//Add the buttons
-		buttons = new JButton[4];
+		buttons = new JButton[6];
 		buttonJPanel = new JPanel();
-		buttonJPanel.setLayout(new GridLayout(1, buttons.length));
+		buttonJPanel.setLayout(new GridLayout(2, 4));
 		
 		buttons[0] = new JButton("Start");
 		buttonJPanel.add(buttons[0]);
@@ -49,6 +49,8 @@ public class Gui extends JFrame
 			{
 				public void actionPerformed(ActionEvent event)
 				{
+					if (buttons[0].toString().equals("Start")) {buttons[0].setText("Add");}
+
 					//add action events
 					System.out.println("\nStart clicked.");
 										
@@ -57,10 +59,44 @@ public class Gui extends JFrame
 					System.out.println("high = " + fields[2].getText());
 					System.out.println("low = " + fields[3].getText());
 					
-					rpt = new runPeriodicTask(Integer.parseInt(fields[1].getText()), 
-										fields[0].getText().toUpperCase(),
-										Double.parseDouble(fields[2].getText()),
-										Double.parseDouble(fields[3].getText()));					
+					boolean hasError=false;					
+					if (fields[0].getText().isEmpty()) {
+						System.out.println("Error: Ticker symbol is empty. Enter a ticker symbol.");
+						hasError=true;
+					}
+					
+					try {
+						Integer.parseInt(fields[1].getText());
+						
+					} catch (NumberFormatException nfe) {
+						System.out.println("Error: Refresh Rate requires an integer.");
+						hasError=true;
+					}
+					try {
+						Double.parseDouble(fields[2].getText());
+						//Integer.parseInt(fields[2].getText());
+						
+					} catch (NumberFormatException nfe) {
+						System.out.println("Error: High Threshold requires a double.");
+						hasError=true;
+					}
+					try {
+						Double.parseDouble(fields[3].getText());
+						//Integer.parseInt(fields[3].getText());
+						
+					} catch (NumberFormatException nfe) {
+						System.out.println("Error: Low Threshold requires a double.");
+						hasError=true;
+					}
+					
+					if (!hasError) {
+						buttons[0].setText("Add");
+					
+						rpt = new runPeriodicTask(Integer.parseInt(fields[1].getText()), 
+							fields[0].getText().toUpperCase(),
+							Double.parseDouble(fields[2].getText()),
+							Double.parseDouble(fields[3].getText()));
+					}	
 				} 
 			}
 		);	
@@ -73,14 +109,15 @@ public class Gui extends JFrame
 				public void actionPerformed(ActionEvent event)
 				{
 					//add action events
-					System.out.println("\nStop clicked.");
+					System.out.println("Stop clicked.\nQuitting...");					
 					rpt.quit=true;
+					System.exit(0);
 				}
 			}
 		);
 		
 				
-		buttons[2] = new JButton("Remove");		// GRAPH
+		buttons[2] = new JButton("Remove");
 		buttonJPanel.add(buttons[2]);
 		buttons[2].addActionListener(
 			new ActionListener()
@@ -88,12 +125,12 @@ public class Gui extends JFrame
 				public void actionPerformed(ActionEvent event)
 				{
 					//add action events
-					System.out.println("\nGraph clicked.");
+					System.out.println("\nRemove clicked.");
 					
-					System.out.println("ticker symbol = " + fields[0].getText());
-					
-					rpt.disableTickerSymbol(fields[0].getText().toString().toUpperCase());
-					
+					// disable
+					// protect against ticker symbols that aren't in the "stockList"
+					//rpt.disableTickerSymbol(fields[0].getText().toString().toUpperCase());
+					rpt = new runPeriodicTask(fields[0].getText().toString().toUpperCase(),2);	
 				}
 			}
 		);
@@ -122,13 +159,41 @@ public class Gui extends JFrame
 					//setTickerandPrice is called by runPeriodicTask to update the price field
 					String message = "Ticker Symbol: " + fields[0].getText();
 					
-					email = new Email(to , from, subject, message);					
-					
+					email = new Email(to , from, subject, message);										
 				}
 			}
 		);
 		
-		
+		buttons[4] = new JButton("Get price");
+		buttonJPanel.add(buttons[4]);
+		buttons[4].addActionListener(
+			new ActionListener()
+			{
+				public void actionPerformed(ActionEvent event)
+				{
+					System.out.println("Get Price clicked.");
+					
+					// get current price -- this fetches the last trade value and sets the Current Price field on the GUI
+					setTickerandPrice(fields[0].getText().toUpperCase(), runPeriodicTask.fetcher.getLastTrade(fields[0].getText()));
+				}
+			}
+		);
+
+		buttons[5] = new JButton("Draw Chart");
+		buttonJPanel.add(buttons[5]);
+		buttons[5].addActionListener(
+			new ActionListener()
+			{
+				public void actionPerformed(ActionEvent event)
+				{
+					System.out.println("Draw Chart clicked.");
+
+					// draw chart (given ticker symbol)
+					rpt = new runPeriodicTask(fields[0].getText().toUpperCase(),5);											
+				}
+			}
+		);
+				
 		add( buttonJPanel, BorderLayout.SOUTH);
 		
 		//Add the button field text
@@ -159,23 +224,23 @@ public class Gui extends JFrame
 		textJPanel.setLayout(new GridLayout(fields.length, 1));
 		
 		//fields[0] = new JTextField("Stock Name");
-		fields[0] = new JTextField(10);
+		fields[0] = new JTextField();
 		textJPanel.add(fields[0]);
 		
 		//fields[1] = new JTextField("Refresh Rate");
-		fields[1] = new JTextField(10);
+		fields[1] = new JTextField();
 		textJPanel.add(fields[1]);
 		
 		//fields[2] = new JTextField("High Value");
-		fields[2] = new JTextField(10);
+		fields[2] = new JTextField();
 		textJPanel.add(fields[2]);
 		
 		//fields[3] = new JTextField("Low Value");
-		fields[3] = new JTextField(10);
+		fields[3] = new JTextField();
 		textJPanel.add(fields[3]);
 		
 		//fields[4] = new JTextField("Email Address", 10);
-		fields[4] = new JTextField(10);
+		fields[4] = new JTextField();
 		textJPanel.add(fields[4]);
 		
 		add( textJPanel, BorderLayout.CENTER);
@@ -189,7 +254,8 @@ public class Gui extends JFrame
 		singletextJPanel.add( label );
 		
 		//price = new JTextField("Current Price");
-		price = new JTextField("Current Price", 10);
+		//price = new JTextField("Current Price", 10);
+		price = new JTextField(10);
 		price.setEditable(false);
 		singletextJPanel.add( price );
 		add(singletextJPanel, BorderLayout.EAST);
