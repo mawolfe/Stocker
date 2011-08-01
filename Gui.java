@@ -154,12 +154,13 @@ public class Gui extends JFrame
 					//String to[] = null; 
 					//		to [0] = (fields[4].getText());
 					String to = fields[4].getText();
+					String pw = fields[5].getText();
 					String from = "Stocker@email.com";
-					String subject = "Email Button Pushed";
+					String subject = "Stocker Email Button Pushed";
 					//setTickerandPrice is called by runPeriodicTask to update the price field
 					String message = "Ticker Symbol: " + fields[0].getText();
 					
-					email = new Email(to , from, subject, message);										
+					email = new Email(to, pw, from, subject, message);										
 				}
 			}
 		);
@@ -197,7 +198,7 @@ public class Gui extends JFrame
 		add( buttonJPanel, BorderLayout.SOUTH);
 		
 		//Add the button field text
-		fieldLabels = new JLabel[5];
+		fieldLabels = new JLabel[6];
 		textLabelJPanel = new JPanel();
 		textLabelJPanel.setLayout(new GridLayout(fieldLabels.length,1));
 		
@@ -216,10 +217,13 @@ public class Gui extends JFrame
 		fieldLabels[4] = new JLabel("Email Address", 10);
 		textLabelJPanel.add(fieldLabels[4]);
 		
+		fieldLabels[5] = new JLabel("Email Password", 10);
+		textLabelJPanel.add(fieldLabels[5]);
+		
 		add( textLabelJPanel, BorderLayout.WEST);
 				
 		//Add the Fields
-		fields = new JTextField[5];
+		fields = new JTextField[6];
 		textJPanel = new JPanel();
 		textJPanel.setLayout(new GridLayout(fields.length, 1));
 		
@@ -242,6 +246,9 @@ public class Gui extends JFrame
 		//fields[4] = new JTextField("Email Address", 10);
 		fields[4] = new JTextField();
 		textJPanel.add(fields[4]);
+		
+		fields[5] = new JTextField();
+		textJPanel.add(fields[5]);
 		
 		add( textJPanel, BorderLayout.CENTER);
 		

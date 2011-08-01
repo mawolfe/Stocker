@@ -4,6 +4,7 @@ import java.util.TimerTask;
 
 import javax.swing.JFrame;
 
+
 /**
  * Periodically fetch stock data.
  */
