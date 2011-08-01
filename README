@@ -18,3 +18,5 @@ To allow this to email the user updates two packages had to be downloaded that d
 Apple/System/Library/Framework/JavaVM.framework/Version/1.5.0/Classes
 
 The way the code is now the user will need to open runPeriodicTask and change the location that the file is saved to.
+
+Gmail is the only email client service that will work.  Yahoo needed an upgraded version and Hotmail had some issues. 
