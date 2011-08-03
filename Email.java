@@ -102,6 +102,12 @@ public class Email
 			String password = "ossstocker";
 			
 			return new PasswordAuthentication(username, password);
+<<<<<<< HEAD
 		}
 	}*/
 }
+=======
+		}*/
+	}
+}
+>>>>>>> 307b6ccdbc2f50632b5a34c08e3e5d925032a3cd

@@ -29,7 +29,7 @@ public void addStock(String tickerSymbol, double threshLow, double threshHigh, i
     			System.out.println(tickerSymbol + " reactivated.");
 
     		} else {
-    			System.out.println(tickerSymbol + " is already active.");
+    			System.out.println(tickerSymbol + " is already active.  Updated thresholds.");
     		}    		
     	}	
     }
