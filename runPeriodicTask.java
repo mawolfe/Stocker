@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 public class runPeriodicTask {
 
 	private boolean canDrawChart=false;
-	public static drawChart stockChart;
+	//public static drawChart stockChart;
 
 	public static String pathName="";
 	public static boolean isRunning=false;
@@ -85,7 +85,7 @@ public class runPeriodicTask {
 			disableTickerSymbol(tickerSymbol);
 		} else if (buttonNum == 5) {
 				if (canDrawChart) {
-					drawChart(tickerSymbol);
+					//drawChart(tickerSymbol);
 				} else {System.out.println("can't find chart library.\nDownload the library at:\n\thttp://www.java2s.com/Code/JavaDownload/jfreechart-1.0.0-rc1.zip");} 
 		}	
 	}
@@ -214,7 +214,7 @@ System.out.println("instance num = " + instanceNum);
 			System.out.println("low = " + tempNode.getThreshLow());
 			System.out.println("high = " + tempNode.getThreshHigh());
 			
-			stockChart = new drawChart(tickerSymbol, pathName, tempNode.getThreshLow(), tempNode.getThreshHigh());
+			//stockChart = new drawChart(tickerSymbol, pathName, tempNode.getThreshLow(), tempNode.getThreshHigh());
 		} else {		
 			System.out.println(tickerSymbol + " not found.");
 		}

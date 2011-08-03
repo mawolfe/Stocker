@@ -10,7 +10,8 @@ import com.sun.mail.smtp.*;
 public class Email
 {
 	//public Email(String recipients[], String from, String subject, String body)
-	public Email(String recipients, String pword, String from, String subject, String body)
+	//public Email(String recipients, String pword, String from, String subject, String body)
+	public Email(String recipients, String pword, String subject, String body)
 	   {
       
       // Assuming you are sending email from localhost
@@ -42,7 +43,7 @@ public class Email
          MimeMessage message = new MimeMessage(session);
 
          // Set From: header field of the header.
-         message.setFrom(new InternetAddress(from));
+         //message.setFrom(new InternetAddress(from));
 
          // Set To: header field of the header.
          /*InternetAddress[] addressTo = new InternetAddress[recipients.length];
@@ -78,18 +79,22 @@ public class Email
          //Transport.send(message);
          
          SMTPTransport t = (SMTPTransport)session.getTransport(prot);
+         //System.out.println(host + " recipients " + recipients + " pword " + pword);
          t.connect(host, recipients, pword);
          t.sendMessage(message, message.getAllRecipients());
          
          System.out.println("Sent message successfully....");
       }catch (MessagingException mex) {
-         mex.printStackTrace();
+         //mex.printStackTrace();
+         System.out.println("Email Failed");
+         System.out.println("Possibly Invalid Username or Password");
+         System.out.println("You must use a gmail account");
       }
    }
 	
-	public static class PopupAuthenticator extends Authenticator
+	/*public static class PopupAuthenticator extends Authenticator
 	{
-		/*public PasswordAuthentication getPasswordAuthentication()
+		public PasswordAuthentication getPasswordAuthentication()
 		{
 			//String username="osssender@yahoo.com";
 			//String password = "stocker";
@@ -97,6 +102,6 @@ public class Email
 			String password = "ossstocker";
 			
 			return new PasswordAuthentication(username, password);
-		}*/
-	}
+		}
+	}*/
 }

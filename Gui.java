@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 import javax.swing.JOptionPane;
 
 public class Gui extends JFrame
@@ -23,6 +24,7 @@ public class Gui extends JFrame
 	private JButton buttons[];
 	private JLabel fieldLabels[];
 	private JTextField fields[];
+	private JPasswordField password;
 	
 	private JLabel label;
 	public JTextField price;
@@ -154,13 +156,15 @@ public class Gui extends JFrame
 					//String to[] = null; 
 					//		to [0] = (fields[4].getText());
 					String to = fields[4].getText();
-					String pw = fields[5].getText();
+					//String pw = fields[5].getText();
+					String pw = password.getText();
 					String from = "Stocker@email.com";
 					String subject = "Stocker Email Button Pushed";
 					//setTickerandPrice is called by runPeriodicTask to update the price field
 					String message = "Ticker Symbol: " + fields[0].getText();
 					
-					email = new Email(to, pw, from, subject, message);										
+					//email = new Email(to, pw, from, subject, message);										
+					email = new Email(to, pw, subject, message);										
 				}
 			}
 		);
@@ -247,8 +251,10 @@ public class Gui extends JFrame
 		fields[4] = new JTextField();
 		textJPanel.add(fields[4]);
 		
-		fields[5] = new JTextField();
-		textJPanel.add(fields[5]);
+		//fields[5] = new JTextField();
+		//textJPanel.add(fields[5]);
+		password = new JPasswordField();
+		textJPanel.add(password);
 		
 		add( textJPanel, BorderLayout.CENTER);
 		
