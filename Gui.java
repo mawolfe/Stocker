@@ -241,7 +241,7 @@ public class Gui extends JFrame
 							"high = "         + fields[2].getText() + "\n" +
 							"low = "          + fields[3].getText() + "\n" +
 							"email = "        + fields[4].getText() + "\n" +
-						    "password = "     + fields[5].getText());
+						    "password = "     + password.getText());
 	}
 
 	private boolean testFieldsOK() {
@@ -303,7 +303,7 @@ public class Gui extends JFrame
 		textLabelJPanel.remove(fieldLabels[5]);		
 		
 		// remove "password" field
-		textJPanel.remove(fields[5]);		
+		textJPanel.remove(password);		
 				
 		// set layout to 1 less
 		textJPanel.setLayout(new GridLayout(fields.length-3, 1));
