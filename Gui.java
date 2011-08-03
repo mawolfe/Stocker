@@ -49,49 +49,13 @@ public class Gui extends JFrame
 			{
 				public void actionPerformed(ActionEvent event)
 				{
-					if (buttons[0].toString().equals("Start")) {buttons[0].setText("Add");}
-
-					//add action events
-					System.out.println("\nStart clicked.");
-										
-					System.out.println("ticker symbol = " + fields[0].getText());
-					System.out.println("refresh rate = " + fields[1].getText());
-					System.out.println("high = " + fields[2].getText());
-					System.out.println("low = " + fields[3].getText());
-					
-					boolean hasError=false;					
-					if (fields[0].getText().isEmpty()) {
-						System.out.println("Error: Ticker symbol is empty. Enter a ticker symbol.");
-						hasError=true;
-					}
-					
-					try {
-						Integer.parseInt(fields[1].getText());
-						
-					} catch (NumberFormatException nfe) {
-						System.out.println("Error: Refresh Rate requires an integer.");
-						hasError=true;
-					}
-					try {
-						Double.parseDouble(fields[2].getText());
-						//Integer.parseInt(fields[2].getText());
-						
-					} catch (NumberFormatException nfe) {
-						System.out.println("Error: High Threshold requires a double.");
-						hasError=true;
-					}
-					try {
-						Double.parseDouble(fields[3].getText());
-						//Integer.parseInt(fields[3].getText());
-						
-					} catch (NumberFormatException nfe) {
-						System.out.println("Error: Low Threshold requires a double.");
-						hasError=true;
-					}
-					
-					if (!hasError) {
+					System.out.println("\nStart clicked.");					
+					printGUIinfo();
+									
+					if (testFieldsOK()) {
 						buttons[0].setText("Add");
-					
+						removeGUIbuttons();
+											
 						rpt = new runPeriodicTask(Integer.parseInt(fields[1].getText()), 
 							fields[0].getText().toUpperCase(),
 							Double.parseDouble(fields[2].getText()),
@@ -128,8 +92,6 @@ public class Gui extends JFrame
 					System.out.println("\nRemove clicked.");
 					
 					// disable
-					// protect against ticker symbols that aren't in the "stockList"
-					//rpt.disableTickerSymbol(fields[0].getText().toString().toUpperCase());
 					rpt = new runPeriodicTask(fields[0].getText().toString().toUpperCase(),2);	
 				}
 			}
@@ -145,12 +107,9 @@ public class Gui extends JFrame
 				{
 					//add action events
 					System.out.println("\nEmail clicked.");
-					
-					System.out.println("ticker symbol = " + fields[0].getText());
-					System.out.println("refresh rate = " + fields[1].getText());
-					System.out.println("high = " + fields[2].getText());
-					System.out.println("low = " + fields[3].getText());
-					
+
+					printGUIinfo();
+
 					//String to[] = null; 
 					//		to [0] = (fields[4].getText());
 					String to = fields[4].getText();
@@ -227,23 +186,18 @@ public class Gui extends JFrame
 		textJPanel = new JPanel();
 		textJPanel.setLayout(new GridLayout(fields.length, 1));
 		
-		//fields[0] = new JTextField("Stock Name");
 		fields[0] = new JTextField();
 		textJPanel.add(fields[0]);
 		
-		//fields[1] = new JTextField("Refresh Rate");
 		fields[1] = new JTextField();
 		textJPanel.add(fields[1]);
-		
-		//fields[2] = new JTextField("High Value");
+
 		fields[2] = new JTextField();
 		textJPanel.add(fields[2]);
 		
-		//fields[3] = new JTextField("Low Value");
 		fields[3] = new JTextField();
 		textJPanel.add(fields[3]);
 		
-		//fields[4] = new JTextField("Email Address", 10);
 		fields[4] = new JTextField();
 		textJPanel.add(fields[4]);
 		
@@ -260,8 +214,6 @@ public class Gui extends JFrame
 		label.setToolTipText("This is the Current Price.");
 		singletextJPanel.add( label );
 		
-		//price = new JTextField("Current Price");
-		//price = new JTextField("Current Price", 10);
 		price = new JTextField(10);
 		price.setEditable(false);
 		singletextJPanel.add( price );
@@ -276,11 +228,84 @@ public class Gui extends JFrame
 		fields[3].addActionListener( handler );
 		fields[4].addActionListener( handler );
 	}
-	
+
+	private void printGUIinfo() {
+		System.out.println("ticker symbol = " + fields[0].getText() + "\n" +							
+							"refresh rate = " + fields[1].getText() + "\n" +
+							"high = "         + fields[2].getText() + "\n" +
+							"low = "          + fields[3].getText() + "\n" +
+							"email = "        + fields[4].getText() + "\n" +
+						    "password = "     + fields[5].getText());
+	}
+
+	private boolean testFieldsOK() {
+		if (fields[0].getText().isEmpty()) {
+			System.out.println("Error: Ticker symbol is empty. Enter a ticker symbol.");
+			return false;
+		}
+		
+		try {
+			Integer.parseInt(fields[1].getText());
+			
+		} catch (NumberFormatException nfe) {
+			System.out.println("Error: Refresh Rate requires an integer.");
+			return false;
+		}
+		try {
+			Double.parseDouble(fields[2].getText());
+			//Integer.parseInt(fields[2].getText());
+			
+		} catch (NumberFormatException nfe) {
+			System.out.println("Error: High Threshold requires a double.");
+			return false;
+		}
+		try {
+			Double.parseDouble(fields[3].getText());
+			//Integer.parseInt(fields[3].getText());
+			
+		} catch (NumberFormatException nfe) {
+			System.out.println("Error: Low Threshold requires a double.");
+			return false;
+		}
+		
+		// fields[4].getText(); 	  // email
+		// pw = fields[5].getText();  // pwd
+		
+		return true;
+	}
+
 	public void setTickerandPrice(String tickerSymb, String curValue) {
 		price.setText(tickerSymb + " " + curValue);
 	}
 
+	
+	private void removeGUIbuttons() {
+
+		// remove "refresh" label
+		textLabelJPanel.remove(fieldLabels[1]);		
+		
+		// remove "refresh" field
+		textJPanel.remove(fields[1]);
+		
+		// remove "email" label
+		textLabelJPanel.remove(fieldLabels[4]);		
+		
+		// remove "email" field
+		textJPanel.remove(fields[4]);		
+
+		// remove "password" label
+		textLabelJPanel.remove(fieldLabels[5]);		
+		
+		// remove "password" field
+		textJPanel.remove(fields[5]);		
+				
+		// set layout to 1 less
+		textJPanel.setLayout(new GridLayout(fields.length-3, 1));
+		textLabelJPanel.setLayout(new GridLayout(fieldLabels.length-3,1));
+		
+		setSize(350, 160); // (x,y)		//resize after removing 2 fields & 2 buttons		
+	}
+	
 	private class FieldHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
