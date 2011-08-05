@@ -51,17 +51,18 @@ public class Gui extends JFrame
 			{
 				public void actionPerformed(ActionEvent event)
 				{
-					System.out.println("\nStart clicked.");					
-					printGUIinfo();
+					System.out.println("\nStart clicked.");										
 									
-					if (testFieldsOK()) {
-						buttons[0].setText("Add");
+					if (guiErrorCount() == 0) {
+						printGUIinfo();
+						buttons[0].setText("Add/Update");
 						removeGUIbuttons();
 											
 						rpt = new runPeriodicTask(Integer.parseInt(fields[1].getText()), 
 							fields[0].getText().toUpperCase(),
 							Double.parseDouble(fields[2].getText()),
-							Double.parseDouble(fields[3].getText()));
+							Double.parseDouble(fields[3].getText()),
+							fields[4].getText(), password.toString());
 					}	
 				} 
 			}
@@ -112,18 +113,25 @@ public class Gui extends JFrame
 
 					printGUIinfo();
 
+					String tickerSymbol = fields[0].getText().toUpperCase();
+					String lastTrade = runPeriodicTask.fetcher.getLastTrade(fields[0].getText());
+					
 					//String to[] = null; 
 					//		to [0] = (fields[4].getText());
 					String to = fields[4].getText();
 					//String pw = fields[5].getText();
-					String pw = password.getText();
-					String from = "Stocker@email.com";
-					String subject = "Stocker Email Button Pushed";
+					String pw = password.toString();
+
+					String subject = tickerSymbol + " " + lastTrade;
+						
 					//setTickerandPrice is called by runPeriodicTask to update the price field
-					String message = "Ticker Symbol: " + fields[0].getText();
-					
-					//email = new Email(to, pw, from, subject, message);										
-					email = new Email(to, pw, subject, message);										
+					String message = 
+						"Ticker Symbol: " + tickerSymbol +
+						"\nLast trade:    " + lastTrade +
+						"\n\n*** Automatically generated message from Stocker. Stocker Email Button Pushed ***";
+
+					email = new Email(to, pw, subject, message);					
+									
 				}
 			}
 		);
@@ -241,13 +249,15 @@ public class Gui extends JFrame
 							"high = "         + fields[2].getText() + "\n" +
 							"low = "          + fields[3].getText() + "\n" +
 							"email = "        + fields[4].getText() + "\n" +
-						    "password = "     + password.getText());
+						    "password = "     + "*********");
 	}
 
-	private boolean testFieldsOK() {
+	private int guiErrorCount() {
+		int errorCount=0;
+		
 		if (fields[0].getText().isEmpty()) {
 			System.out.println("Error: Ticker symbol is empty. Enter a ticker symbol.");
-			return false;
+			errorCount++;
 		}
 		
 		try {
@@ -255,7 +265,7 @@ public class Gui extends JFrame
 			
 		} catch (NumberFormatException nfe) {
 			System.out.println("Error: Refresh Rate requires an integer.");
-			return false;
+			errorCount++;
 		}
 		try {
 			Double.parseDouble(fields[2].getText());
@@ -263,7 +273,7 @@ public class Gui extends JFrame
 			
 		} catch (NumberFormatException nfe) {
 			System.out.println("Error: High Threshold requires a double.");
-			return false;
+			errorCount++;
 		}
 		try {
 			Double.parseDouble(fields[3].getText());
@@ -271,13 +281,13 @@ public class Gui extends JFrame
 			
 		} catch (NumberFormatException nfe) {
 			System.out.println("Error: Low Threshold requires a double.");
-			return false;
+			errorCount++;
 		}
 		
 		// fields[4].getText(); 	  // email
 		// pw = fields[5].getText();  // pwd
 		
-		return true;
+		return errorCount;
 	}
 
 	public void setTickerandPrice(String tickerSymb, String curValue) {
@@ -309,7 +319,15 @@ public class Gui extends JFrame
 		textJPanel.setLayout(new GridLayout(fields.length-3, 1));
 		textLabelJPanel.setLayout(new GridLayout(fieldLabels.length-3,1));
 		
-		setSize(350, 160); // (x,y)		//resize after removing 2 fields & 2 buttons		
+		// resize after removing 2 fields & 2 buttons
+		// (350, 210) to (355, 160)
+		int x=350, y;
+		for (int i=1; i<=50; i++) {
+			if (i%10 == 0) {x++;}
+			y=210-i;
+			setSize(x, y); // (x,y)			
+		}
+
 	}
 	
 	private class FieldHandler implements ActionListener

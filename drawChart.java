@@ -60,19 +60,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import java.awt.Font;
-import org.jfree.chart.annotations.XYTextAnnotation;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-
-/**
- * A demonstration application showing how to create a vertical combined chart.
- *
- */
 public class drawChart extends ApplicationFrame {
-
 	
 	runPeriodicTask rpt;
     /**
@@ -91,7 +80,6 @@ public class drawChart extends ApplicationFrame {
         this.pack();
         RefineryUtilities.centerFrameOnScreen(this);
         this.setVisible(true);
-
     }
 
     /**
@@ -108,38 +96,18 @@ public class drawChart extends ApplicationFrame {
         final XYPlot subplot1 = new XYPlot(data1, null, rangeAxis1, renderer1);
         subplot1.setRangeAxisLocation(AxisLocation.BOTTOM_OR_LEFT);
         
-//        final XYTextAnnotation annotation = new XYTextAnnotation("Hello!", 50.0, 10000.0);
-//        annotation.setFont(new Font("SansSerif", Font.PLAIN, 9));
-//        annotation.setRotationAngle(Math.PI / 4.0);
-//        subplot1.addAnnotation(annotation);
-        
-        // create subplot 2...
-//        final XYDataset data2 = createDataset2();
-//        final XYItemRenderer renderer2 = new StandardXYItemRenderer();
-//        final NumberAxis rangeAxis2 = new NumberAxis("Range 2");
-//        rangeAxis2.setAutoRangeIncludesZero(false);
-//        final XYPlot subplot2 = new XYPlot(data2, null, rangeAxis2, renderer2);
-//        subplot2.setRangeAxisLocation(AxisLocation.TOP_OR_LEFT);
-
         // parent plot...
         final CombinedDomainXYPlot plot = new CombinedDomainXYPlot(new NumberAxis("Time"));
         plot.setGap(10.0);
         
         // add the subplots...
         plot.add(subplot1, 1);
-//        plot.add(subplot2, 1);
         plot.setOrientation(PlotOrientation.VERTICAL);
 
         // return a new chart containing the overlaid plot...
-        return new JFreeChart(tickerSymbol,
-                              JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+        return new JFreeChart(tickerSymbol, JFreeChart.DEFAULT_TITLE_FONT, plot, true);
     }
 
-    /**
-     * Creates a sample dataset.
-     *
-     * @return Series 1.
-     */
     private XYDataset createDataset1(String tickerSymbol, String pathName, double lowThresh, double highThresh) {
 
         // create dataset 1...
@@ -152,16 +120,10 @@ public class drawChart extends ApplicationFrame {
     		
     		try {
 	            String line = null; //not declared within while loop
-	            
-	            // readLine is a bit quirky :
-	            // it returns the content of a line MINUS the newline.
-	            // it returns null only for the END of the stream.
-	            // it returns an empty String if two newlines appear in a row.
-	            
+	            	            
 	            System.out.println("* ------ START INPUT ------- *");
 	            while (( line = input.readLine()) != null) {
 	                System.out.println(line);
-//	                sLL.addStock(line);
 	                series1.add(entryNum, Double.parseDouble(line));
 	                entryNum++;
 	            }
@@ -174,12 +136,14 @@ public class drawChart extends ApplicationFrame {
     		fnfe.printStackTrace();
         }
 
-System.out.println("i = " + entryNum);
+    	System.out.println("i = " + entryNum);
 
+    	// add low threshold
         final XYSeries series2 = new XYSeries("Low Threshold");
         series2.add(1, lowThresh);
         series2.add(entryNum, lowThresh);
 
+    	// add high threshold
         final XYSeries series3 = new XYSeries("High Threshold");
         series3.add(1, highThresh);
         series3.add(entryNum, highThresh);
@@ -208,12 +172,5 @@ System.out.println("i = " + entryNum);
      *
      * @param args  ignored.
      */
-//    public static void main(final String[] args) {
 
-//        final myXY2 demo = new myXY2("MENT", 4, 15);
-//        demo.pack();
-//        RefineryUtilities.centerFrameOnScreen(demo);
-//        demo.setVisible(true);
-
-//    }
 }

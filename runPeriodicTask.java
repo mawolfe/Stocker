@@ -11,8 +11,13 @@ import javax.swing.JFrame;
 
 public class runPeriodicTask {
 
-	private boolean canDrawChart=false;
-	//public static drawChart stockChart;
+	private static String emailAddress;
+	private static String emailPassword;
+	
+    public static boolean canDrawChart=false;
+    public static boolean canEmail=false;
+        
+	public static drawChart stockChart;
 
 	public static String pathName="";
 	public static boolean isRunning=false;
@@ -31,15 +36,36 @@ public class runPeriodicTask {
 	static FileIO fio = new FileIO();
     
     public static void main(String[] arg) {
+    	
+    	// check libraries
+        if (System.getProperty("java.class.path",null).contains("jcommon") &&
+           (System.getProperty("java.class.path",null).contains("jfreechart"))) {
+                System.out.println("JCommon and JFreeChart are installed");
+                canDrawChart=true;
+        } else if (!System.getProperty("java.class.path",null).contains("jcommon")) {
+            System.out.println("JCommon is not installed.  Refer to the documentation for information on how to add the JCommon library.");
+        } else if (!System.getProperty("java.class.path",null).contains("jfreechart")) {
+            System.out.println("JFreeChart is not installed.  Refer to the documentation for information on how to add the JFreeChart library.");
+        }
+        
+        if (System.getProperty("java.class.path",null).contains("javamail")) {
+            System.out.println("JavaMail is installed");
+            canEmail=true;
+        } else {
+            System.out.println("JavaMail is not installed.  Refer to the documentation for information on how to add the JavaMail library.");
+        }
+        
     	gui = new Gui();
     	gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	gui.setSize(350, 210); // (x,y)
     	gui.setVisible(true);    	
     }
 		
-	public runPeriodicTask(int refreshRate, String tickerSymbol, double hi, double lo) {
+	public runPeriodicTask(int refreshRate, String tickerSymbol, double hi, double lo, String emailAddr, String pwd) {
 		
-		//init();									// add stocks
+		//set email address and password
+		emailAddress = emailAddr;
+		emailPassword = pwd;
 		
 		instanceNum = getInstanceNum(tickerSymbol);		
 		stockList.addStock(tickerSymbol, lo, hi, instanceNum);
@@ -85,7 +111,7 @@ public class runPeriodicTask {
 			disableTickerSymbol(tickerSymbol);
 		} else if (buttonNum == 5) {
 				if (canDrawChart) {
-					//drawChart(tickerSymbol);
+					drawChart(tickerSymbol);
 				} else {System.out.println("can't find chart library.\nDownload the library at:\n\thttp://www.java2s.com/Code/JavaDownload/jfreechart-1.0.0-rc1.zip");} 
 		}	
 	}
@@ -113,7 +139,9 @@ public class runPeriodicTask {
 					//System.out.print(cnt + " ");
 					
 					tempLastTrade = fetcher.getLastTrade(tempNode.getTickerSymbol());
-	
+					tempNode.setLastTrade(tempLastTrade);
+					  
+					  
 					gui.setTickerandPrice(tempNode.getTickerSymbol(), tempLastTrade);			
 					System.out.print("\n" + new Timestamp(date.getTime()) + ", " + 
 											tempNode.getTickerSymbol()+": " + tempLastTrade + 
@@ -123,30 +151,53 @@ public class runPeriodicTask {
 							pathName + tempNode.getTickerSymbol() + ".txt", 
 							tempLastTrade);				
 					
-					testThresholds(tempNode, tempLastTrade);
+					testThresholds(tempNode);
 				}
 			}
 			cnt++;
 		}
 	}
+	
+	public void testThresholds(StockNode _stockNode) {
 
-	public void testThresholds(StockNode _stockNode, String _lastTrade) {
-
-		if (Double.parseDouble(_lastTrade) < _stockNode.getThreshLow()) {
+		if (Double.parseDouble(_stockNode.getLastTrade()) < _stockNode.getThreshLow()) {
 			System.out.println("*** " + _stockNode.getTickerSymbol() + " is lower than low threshold. ***");
 
 			// send email
 			if (!_stockNode.getEmailed()) {		// if it hasn't been emailed
 				System.out.println("send email...");
+
+				if (canEmail) {					
+					new Email(emailAddress, emailPassword.toString(),
+							"Stocker Alert: " + _stockNode.getTickerSymbol() + " is LOW",
+		                    "Last trade (low): " + _stockNode.getLastTrade() + 
+		                    "\nlow threshold: " + _stockNode.getThreshLow() + 
+		                    "\n\n*** Automatically generated message from Stocker. ***");
+				} else {
+					System.out.println("JavaMail library not installed. Unable to send email.");
+				}
+
+	               
 				_stockNode.setEmailed(true);	// set emailed in node to true
 			}
 		
-		} else if (Double.parseDouble(_lastTrade) > _stockNode.getThreshHigh()) {
+		} else if (Double.parseDouble(_stockNode.getLastTrade()) > _stockNode.getThreshHigh()) {
 			System.out.println("*** " + _stockNode.getTickerSymbol() + " is higher than high threshold. ***");
 
 			// send email
 			if (!_stockNode.getEmailed()) {		// if it hasn't been emailed
 				System.out.println("send email...");
+				
+				if (canEmail) {
+					new Email(emailAddress, emailPassword.toString(),
+							"Stocker Alert: " + _stockNode.getLastTrade() + " is HIGH",
+		            		"Last trade (high): " + _stockNode.getLastTrade() + 
+		                    "\nhigh threshold: " + _stockNode.getThreshHigh() + 
+		                    "\n\n*** Automatically generated message from Stocker. ***");				
+				} else {
+					System.out.println("JavaMail library not installed. Unable to send email.");
+				}
+				
 				_stockNode.setEmailed(true);	// set emailed in node to true
 			}
 
@@ -197,13 +248,13 @@ public class runPeriodicTask {
 	public int getInstanceNum(String tickerSymb) {
 		
 		if (stockList.findTickerSymb(tickerSymb)==null) {
-System.out.println("instance num = " + instanceNum);
+			// System.out.println("instance num = " + instanceNum);
 			return instanceNum+1;
 		} else {
-System.out.println("instance num = " + instanceNum);			
+			// System.out.println("instance num = " + instanceNum);			
 			return stockList.findTickerSymb(tickerSymb).getInstanceNum();		
 		}
-	}// gitInstanceNum
+	}
 	
 	public void drawChart(String tickerSymbol) {
 		
@@ -214,21 +265,9 @@ System.out.println("instance num = " + instanceNum);
 			System.out.println("low = " + tempNode.getThreshLow());
 			System.out.println("high = " + tempNode.getThreshHigh());
 			
-			//stockChart = new drawChart(tickerSymbol, pathName, tempNode.getThreshLow(), tempNode.getThreshHigh());
+			stockChart = new drawChart(tickerSymbol, pathName, tempNode.getThreshLow(), tempNode.getThreshHigh());
 		} else {		
 			System.out.println(tickerSymbol + " not found.");
 		}
 	}
-
-	/*
-  	public static void main(String args[]) {
-  		
-  		int refreshRate = 1;		// Updates every "refreshRate" seconds
-		// what's the fastest the code can execute? 1,2,5 seconds?
-  		
-	  	System.out.println("About to schedule task.");    
-	  	new runPeriodicTask(refreshRate);
-	  	System.out.println("Task scheduled.");
-	}
-	*/
 }
