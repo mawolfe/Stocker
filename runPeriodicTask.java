@@ -4,7 +4,6 @@ import java.util.TimerTask;
 
 import javax.swing.JFrame;
 
-
 /**
  * Periodically fetch stock data.
  */
@@ -38,22 +37,7 @@ public class runPeriodicTask {
     public static void main(String[] arg) {
     	
     	// check libraries
-        if (System.getProperty("java.class.path",null).contains("jcommon") &&
-           (System.getProperty("java.class.path",null).contains("jfreechart"))) {
-                System.out.println("JCommon and JFreeChart are installed");
-                canDrawChart=true;
-        } else if (!System.getProperty("java.class.path",null).contains("jcommon")) {
-            System.out.println("JCommon is not installed.  Refer to the documentation for information on how to add the JCommon library.");
-        } else if (!System.getProperty("java.class.path",null).contains("jfreechart")) {
-            System.out.println("JFreeChart is not installed.  Refer to the documentation for information on how to add the JFreeChart library.");
-        }
-        
-        if (System.getProperty("java.class.path",null).contains("javamail")) {
-            System.out.println("JavaMail is installed");
-            canEmail=true;
-        } else {
-            System.out.println("JavaMail is not installed.  Refer to the documentation for information on how to add the JavaMail library.");
-        }
+    	checkLibraries();
         
     	gui = new Gui();
     	gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -185,6 +169,9 @@ public class runPeriodicTask {
 			System.out.println("*** " + _stockNode.getTickerSymbol() + " is higher than high threshold. ***");
 
 			// send email
+			if (!_stockNode.getEmailed()) {		// if it hasn't been emailed
+				System.out.println("send email...");
+				
 				if (canEmail) {
 					String tickerSymb=_stockNode.getTickerSymbol(), lastTrade=_stockNode.getLastTrade();
 					new Email(emailAddress, emailPassword.toString(),
@@ -267,5 +254,25 @@ public class runPeriodicTask {
 		} else {		
 			System.out.println(tickerSymbol + " not found.");
 		}
+	}
+	
+	public static void checkLibraries() {
+		
+	    if (System.getProperty("java.class.path",null).contains("jcommon") &&
+	       (System.getProperty("java.class.path",null).contains("jfreechart"))) {
+	            System.out.println("JCommon and JFreeChart are installed");
+	            canDrawChart=true;
+	    } else if (!System.getProperty("java.class.path",null).contains("jcommon")) {
+	        System.out.println("JCommon is not installed.  Refer to the documentation for information on how to add the JCommon library.");
+	    } else if (!System.getProperty("java.class.path",null).contains("jfreechart")) {
+	        System.out.println("JFreeChart is not installed.  Refer to the documentation for information on how to add the JFreeChart library.");
+	    }
+	    
+	    if (System.getProperty("java.class.path",null).contains("javamail")) {
+	        System.out.println("JavaMail is installed");
+	        canEmail=true;
+	    } else {
+	        System.out.println("JavaMail is not installed.  Refer to the documentation for information on how to add the JavaMail library.");
+	    }
 	}
 }

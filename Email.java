@@ -9,10 +9,10 @@ import com.sun.mail.smtp.*;
 
 public class Email
 {
-	//public Email(String recipients[], String from, String subject, String body)
-	//public Email(String recipients, String pword, String from, String subject, String body)
-	public Email(String recipients, String pword, String subject, String body)
-	   {
+//public Email(String recipients[], String from, String subject, String body)
+//public Email(String recipients, String pword, String from, String subject, String body)
+public Email(String recipients, String pword, String subject, String body)
+{
       
       // Assuming you are sending email from localhost
       //String host = "localhost";
@@ -33,9 +33,9 @@ public class Email
       
       /*Authenticator auth = new PopupAuthenticator();
 
-      // Get the default Session object.
-      Session session = Session.getDefaultInstance(properties, auth);
-      */
+// Get the default Session object.
+Session session = Session.getDefaultInstance(properties, auth);
+*/
       Session session = Session.getInstance(properties, null);
 
       try{
@@ -47,13 +47,12 @@ public class Email
 
          // Set To: header field of the header.
          /*InternetAddress[] addressTo = new InternetAddress[recipients.length];
-         for(int i = 0; i < recipients.length; i++)
-         {
-        	 addressTo[i] = new InternetAddress(recipients[i]);
-         }
-         
-         message.setRecipients(Message.RecipientType.TO, addressTo);
-         */
+for(int i = 0; i < recipients.length; i++)
+{
+addressTo[i] = new InternetAddress(recipients[i]);
+}
+message.setRecipients(Message.RecipientType.TO, addressTo);
+*/
          
          message.addRecipient(Message.RecipientType.TO,
                                   new InternetAddress(recipients));
@@ -91,17 +90,4 @@ public class Email
          System.out.println("You must use a gmail account");
       }
    }
-	
-	/*public static class PopupAuthenticator extends Authenticator
-	{
-		public PasswordAuthentication getPasswordAuthentication()
-		{
-			//String username="osssender@yahoo.com";
-			//String password = "stocker";
-			String username="OpenSS510@gmail.com";
-			String password = "ossstocker";
-			
-			return new PasswordAuthentication(username, password);
-		}
-	}*/
 }

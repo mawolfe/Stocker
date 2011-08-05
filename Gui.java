@@ -131,7 +131,7 @@ public class Gui extends JFrame
 						"\nLast trade:    " + lastTrade +
 						"\n\n*** Automatically generated message from Stocker. Stocker Email Button Pushed ***";
 
-					email = new Email(to, pw, subject, message);					
+					email = new Email(to, pw, subject, message);
 									
 				}
 			}
