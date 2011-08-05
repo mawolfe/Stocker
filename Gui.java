@@ -56,7 +56,8 @@ public class Gui extends JFrame
 					if (guiErrorCount() == 0) {
 						printGUIinfo();
 						buttons[0].setText("Add/Update");
-						removeGUIbuttons();
+
+						if (getSize().height > 160) {removeGUIbuttons();}
 											
 						rpt = new runPeriodicTask(Integer.parseInt(fields[1].getText()), 
 							fields[0].getText().toUpperCase(),
@@ -325,7 +326,7 @@ public class Gui extends JFrame
 		for (int i=1; i<=50; i++) {
 			if (i%10 == 0) {x++;}
 			y=210-i;
-			setSize(x, y); // (x,y)			
+			setSize(x, y); // (x,y)			// ends at (355, 160)
 		}
 
 	}
