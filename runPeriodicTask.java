@@ -177,7 +177,7 @@ public class runPeriodicTask {
 					new Email(emailAddress, emailPassword.toString(),
 							"Stocker Alert: " + tickerSymb + " is HIGH (" + lastTrade + ")",
 		            		"Last trade (high): " + lastTrade + 
-		                    "\nhigh threshold:    " + lastTrade + 
+		                    "\nhigh threshold:    " + _stockNode.getThreshHigh() + 
 		                    "\n\n*** Automatically generated message from Stocker. ***");				
 				} else {
 					System.out.println("JavaMail library not installed. Unable to send email.");
