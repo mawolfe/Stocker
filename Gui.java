@@ -63,7 +63,7 @@ public class Gui extends JFrame
 							fields[0].getText().toUpperCase(),
 							Double.parseDouble(fields[2].getText()),
 							Double.parseDouble(fields[3].getText()),
-							fields[4].getText(), password.toString());
+							fields[4].getText(), password.getText());
 					}	
 				} 
 			}
@@ -121,7 +121,7 @@ public class Gui extends JFrame
 					//		to [0] = (fields[4].getText());
 					String to = fields[4].getText();
 					//String pw = fields[5].getText();
-					String pw = password.toString();
+					String pw = password.getText();
 
 					String subject = tickerSymbol + " " + lastTrade;
 						
