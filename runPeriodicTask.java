@@ -168,15 +168,15 @@ public class runPeriodicTask {
 				System.out.println("send email...");
 
 				if (canEmail) {					
+					String tickerSymb=_stockNode.getTickerSymbol(), lastTrade=_stockNode.getLastTrade();
 					new Email(emailAddress, emailPassword.toString(),
-							"Stocker Alert: " + _stockNode.getTickerSymbol() + " is LOW",
-		                    "Last trade (low): " + _stockNode.getLastTrade() + 
-		                    "\nlow threshold: " + _stockNode.getThreshLow() + 
+							"Stocker Alert: " + tickerSymb + " is LOW (" + lastTrade + ")",
+		                    "Last trade (low): " + lastTrade + 
+		                    "\nlow threshold:    " + _stockNode.getThreshLow() + 
 		                    "\n\n*** Automatically generated message from Stocker. ***");
 				} else {
 					System.out.println("JavaMail library not installed. Unable to send email.");
 				}
-
 	               
 				_stockNode.setEmailed(true);	// set emailed in node to true
 			}
@@ -185,14 +185,12 @@ public class runPeriodicTask {
 			System.out.println("*** " + _stockNode.getTickerSymbol() + " is higher than high threshold. ***");
 
 			// send email
-			if (!_stockNode.getEmailed()) {		// if it hasn't been emailed
-				System.out.println("send email...");
-				
 				if (canEmail) {
+					String tickerSymb=_stockNode.getTickerSymbol(), lastTrade=_stockNode.getLastTrade();
 					new Email(emailAddress, emailPassword.toString(),
-							"Stocker Alert: " + _stockNode.getLastTrade() + " is HIGH",
-		            		"Last trade (high): " + _stockNode.getLastTrade() + 
-		                    "\nhigh threshold: " + _stockNode.getThreshHigh() + 
+							"Stocker Alert: " + tickerSymb + " is HIGH (" + lastTrade + ")",
+		            		"Last trade (high): " + lastTrade + 
+		                    "\nhigh threshold:    " + lastTrade + 
 		                    "\n\n*** Automatically generated message from Stocker. ***");				
 				} else {
 					System.out.println("JavaMail library not installed. Unable to send email.");
