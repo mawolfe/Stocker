@@ -44,16 +44,16 @@ public class runPeriodicTask {
 	static FetchData fetcher = new FetchData();
 	static FileIO fio = new FileIO();
     
-    public static void main(String[] arg) {
+	public static void main(String[] arg) {
     	
-    	// check libraries
-    	checkLibraries();
+		// check libraries
+		checkLibraries();
         
-    	gui = new Gui();
-    	gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	gui.setSize(350, 210); // (x,y)
-    	gui.setVisible(true);    	
-    }
+		gui = new Gui();
+		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gui.setSize(350, 210); // (x,y)
+		gui.setVisible(true);    	
+	}
 		
 	public runPeriodicTask(int refreshRate, String tickerSymbol, double hi, double lo, String emailAddr, String pwd) {
 		
