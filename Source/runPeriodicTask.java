@@ -1,13 +1,3 @@
-/*LICENSING
-
-Copyright (c) 2011, Matthew Wolfe, Andy Gospodnetich
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
 import java.sql.Timestamp;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,7 +8,15 @@ import javax.swing.JFrame;
  * Periodically fetch stock data.
  */
 
+
+
 public class runPeriodicTask {
+
+	// Set the path name(s) of the Operating System(s) you want to run Stocker on.
+	private static String pathName="";
+	private static String pathNameMac="//users//matthewwolfe//Documents//";
+	private static String pathNameWindows="C:\\PSU\\cs510_OpenSource\\";
+	private static String pathNameLinux="//u//agospodn//cs510_OpenSource//";
 
 	private static String emailAddress;
 	private static String emailPassword;
@@ -28,9 +26,7 @@ public class runPeriodicTask {
         
 	public static drawChart stockChart;
 
-	public static String pathName="";
 	public static boolean isRunning=false;
-	
 	public static Gui gui;
 	public static StockLinkedList stockList = new StockLinkedList();
 	public static int instanceNum=0;
@@ -70,15 +66,8 @@ public class runPeriodicTask {
 			timer = new Timer();
 			isRunning = true;
 			
-			if (myOS.equals("windows")) {
-				pathName = "C:\\PSU\\cs510_OpenSource\\";	        		        	
-	        } else if (myOS.equals("linux")) {
-	        	pathName = "//u//agospodn//cs510_OpenSource//";
-	        } else if (myOS.equals("mac")){
-				pathName = "//users//matthewwolfe//Documents//";	        					
-	        }	else {
-	        	System.out.println(myOS + " operating system not supported.");
-	        }
+			setAndCheckPath();
+
 			timer.schedule(new periodicMethod(), 0, //initial delay
     		        refreshRate * 1000); //subsequent rate
 			
@@ -152,6 +141,62 @@ public class runPeriodicTask {
 		}
 	}
 	
+	private void setAndCheckPath() {
+		
+		String myOS = getOS.getOsName();
+		boolean hasError=false;
+		
+		if (myOS.equals("windows")) {
+			pathName = pathNameWindows; 		
+			if (!pathName.endsWith("\\")) {pathName=pathName+"\\";}	// ensure Windows pathName ends with "\\"
+			
+			// create directory if necessary
+			new File(pathName).mkdir();
+			
+			// check if directory exists
+			if (!new File(pathName).exists()) {
+				hasError=true;
+				System.out.println("\nError: The following Windows path cannot be found:\n" +
+									"\t" + pathNameWindows + "\n" +
+									"Set the pathNameWindows variable in runPeriodicTask.java.");				
+			}
+			
+	    } else if (myOS.equals("linux")) {
+	    	pathName = pathNameLinux; 
+			if (!pathName.endsWith("//")) {pathName=pathName+"//";}	// ensure Linux pathName ends with "//"
+
+			// create directory if necessary
+			new File(pathName).mkdir();
+
+			// check if directory exists
+			if (!new File(pathName).exists()) {
+				hasError=true;
+				System.out.println("\nError: The following Linux path cannot be found:\n" +
+						"\t" + pathNameLinux + "\n" +
+						"Set the pathNameLinux variable in runPeriodicTask.java.");				
+			}					
+			
+	    } else if (myOS.equals("mac")){
+			pathName = pathNameMac;	        	
+			if (!pathName.endsWith("//")) {pathName=pathName+"//";}	// ensure Mac pathName ends with "//"
+
+			// create directory if necessary
+			new File(pathName).mkdir();
+
+			// check if directory exists
+			if (!new File(pathName).exists()) {
+				hasError=true;
+				System.out.println("\nError: The following Mac path cannot be found:\n" +
+						"\t" + pathNameMac + "\n" +
+						"Set the pathNameMac variable in runPeriodicTask.java.");				
+			}					
+	    } else {
+	    	System.out.println(myOS + " operating system not supported.");	    	
+	    }
+		
+		if (hasError) {System.exit(0);}
+	}
+
 	public void testThresholds(StockNode _stockNode) {
 
 		if (Double.parseDouble(_stockNode.getLastTrade()) < _stockNode.getThreshLow()) {
