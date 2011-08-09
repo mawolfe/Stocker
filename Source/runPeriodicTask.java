@@ -25,8 +25,8 @@ public class runPeriodicTask {
 	private static String emailAddress;
 	private static String emailPassword;
 	
-    public static boolean canDrawChart=false;
-    public static boolean canEmail=false;
+	public static boolean canDrawChart=false;
+	public static boolean canEmail=false;
         
 	public static drawChart stockChart;
 
