@@ -14,19 +14,13 @@ import java.util.TimerTask;
 
 import javax.swing.JFrame;
 
-/**
- * Periodically fetch stock data.
- */
-
-
-
 public class runPeriodicTask {
 
 	// Set the path name(s) of the Operating System(s) you want to run Stocker on.
 	private static String pathName="";
-	private static String pathNameMac="//users//matthewwolfe//Documents//";
-	private static String pathNameWindows="C:\\PSU\\cs510_OpenSource\\";
-	private static String pathNameLinux="//u//agospodn//cs510_OpenSource//";
+	private static String pathNameMac = "//users//matthewwolfe//Documents//";
+	private static String pathNameWindows = "C:\\PSU\\cs510_OpenSource\\";
+	private static String pathNameLinux = "//u//agospodn//cs510_OpenSource//";
 
 	private static String emailAddress;
 	private static String emailPassword;
