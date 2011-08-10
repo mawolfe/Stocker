@@ -261,6 +261,11 @@ public class Gui extends JFrame
 		if (fields[0].getText().isEmpty()) {
 			System.out.println("Error: Ticker symbol is empty. Enter a ticker symbol.");
 			errorCount++;
+			JOptionPane.showMessageDialog(null,
+				    "Ticker symbol is empty. Enter a ticker symbol.",
+				    "Ticker Symbol",
+				    JOptionPane.ERROR_MESSAGE);
+
 		}
 		
 		try {
@@ -269,22 +274,33 @@ public class Gui extends JFrame
 		} catch (NumberFormatException nfe) {
 			System.out.println("Error: Refresh Rate requires an integer.");
 			errorCount++;
+			JOptionPane.showMessageDialog(null,
+				    "Refresh rate requires an integer.",
+				    "Refresh rate",
+				    JOptionPane.ERROR_MESSAGE);
+
 		}
 		try {
 			Double.parseDouble(fields[2].getText());
-			//Integer.parseInt(fields[2].getText());
 			
 		} catch (NumberFormatException nfe) {
 			System.out.println("Error: High Threshold requires a double.");
 			errorCount++;
+			JOptionPane.showMessageDialog(null,
+				    "High Threshold requires a double.",
+				    "High Threshold",
+				    JOptionPane.ERROR_MESSAGE);
 		}
 		try {
 			Double.parseDouble(fields[3].getText());
-			//Integer.parseInt(fields[3].getText());
 			
 		} catch (NumberFormatException nfe) {
 			System.out.println("Error: Low Threshold requires a double.");
 			errorCount++;
+			JOptionPane.showMessageDialog(null,
+				    "Low Threshold requires a double.",
+				    "Low Threshold",
+				    JOptionPane.ERROR_MESSAGE);
 		}
 		
 		// fields[4].getText(); 	  // email
