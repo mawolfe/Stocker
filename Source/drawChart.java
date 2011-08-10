@@ -66,16 +66,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-
 public class drawChart extends ApplicationFrame {
 	
 	runPeriodicTask rpt;
-    /**
-     * Constructs a new demonstration application.
-     *
-     * @param title  the frame title.
-     */
-    public drawChart(final String tickerSymbol, String pathName, double lowThresh, double highThresh) {
+
+	// Draw a chart by calling drawChart providing a ticker symbol, the path name, and high and low threshold values
+	
+	public drawChart(final String tickerSymbol, String pathName, double lowThresh, double highThresh) {
 
         super("Stocker Chart");
         final JFreeChart chart = createCombinedChart(tickerSymbol, pathName, lowThresh, highThresh);
@@ -88,25 +85,22 @@ public class drawChart extends ApplicationFrame {
         this.setVisible(true);
     }
 
-    /**
-     * Creates a combined chart.
-     *
-     * @return the combined chart.
-     */
+    // Creates a combined chart.
+    // @return the combined chart.
     private JFreeChart createCombinedChart(String tickerSymbol, String pathName, double lowThresh, double highThresh) {
 
-        // create subplot 1...
+        // create the plot for the tickerSymbol data
         final XYDataset data1 = createDataset1(tickerSymbol,pathName,lowThresh,highThresh);
         final XYItemRenderer renderer1 = new StandardXYItemRenderer();
         final NumberAxis rangeAxis1 = new NumberAxis("Stock Price ($)");
         final XYPlot subplot1 = new XYPlot(data1, null, rangeAxis1, renderer1);
         subplot1.setRangeAxisLocation(AxisLocation.BOTTOM_OR_LEFT);
         
-        // parent plot...
+        // parent plot
         final CombinedDomainXYPlot plot = new CombinedDomainXYPlot(new NumberAxis("Time"));
         plot.setGap(10.0);
         
-        // add the subplots...
+        // add the subplot
         plot.add(subplot1, 1);
         plot.setOrientation(PlotOrientation.VERTICAL);
 
@@ -114,13 +108,14 @@ public class drawChart extends ApplicationFrame {
         return new JFreeChart(tickerSymbol, JFreeChart.DEFAULT_TITLE_FONT, plot, true);
     }
 
+    // Create the dataset from the specified tickerSymbol
     private XYDataset createDataset1(String tickerSymbol, String pathName, double lowThresh, double highThresh) {
 
         // create dataset 1...
         final XYSeries series1 = new XYSeries(tickerSymbol);
         
-        int entryNum = 1;
-    	try {
+        int entryNum = 1;		// keep track the the number of entries
+    	try {					// entryNum is used to provide the x values for the low and high threshold plots
 
     		BufferedReader input =  new BufferedReader(new FileReader(pathName + tickerSymbol + ".txt"));
     		

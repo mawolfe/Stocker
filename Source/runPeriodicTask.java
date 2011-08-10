@@ -8,6 +8,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -36,8 +37,6 @@ public class runPeriodicTask {
 	public static int instanceNum=0;
 	
 	static protected boolean quit=false;
-	//Toolkit toolkit;
-	static boolean debug=false;
 
 	static final String myOS = getOS.getOsName();
 	static Timer timer;
@@ -46,10 +45,9 @@ public class runPeriodicTask {
     
 	public static void main(String[] arg) {
     	
-		// check libraries
-		checkLibraries();
+		checkLibraries();		// check libraries
         
-		gui = new Gui();
+		gui = new Gui();		// instantiate the gui
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setSize(350, 210); // (x,y)
 		gui.setVisible(true);    	
@@ -57,14 +55,12 @@ public class runPeriodicTask {
 		
 	public runPeriodicTask(int refreshRate, String tickerSymbol, double hi, double lo, String emailAddr, String pwd) {
 		
-		//set email address and password
-		emailAddress = emailAddr;
+		emailAddress = emailAddr;			//set email address and password
 		emailPassword = pwd;
 		
 		instanceNum = getInstanceNum(tickerSymbol);		
 		stockList.addStock(tickerSymbol, lo, hi, instanceNum);
 		
-	    // toolkit = Toolkit.getDefaultToolkit();
 		if (!isRunning) {
 			
 			timer = new Timer();
@@ -105,6 +101,8 @@ public class runPeriodicTask {
 	
 	class periodicMethod extends TimerTask {
 	    
+		// This method loops through the linked list and fetches the last trade value for each ticker symbol. This method is periodically called.  
+		
 		int cnt = 0;
 		
 		public void run() {						
@@ -114,26 +112,27 @@ public class runPeriodicTask {
 			StockNode tempNode;
 			String tempLastTrade="";
 
-			if (debug) {System.out.print("quit = " + quit);}			
+			// if the Stop button is clicked, then quit
 			if (quit) {System.out.print("Stopped.");	System.exit(0);}
 			
+			// loop through each node in the list
 			for (int i=0; i<stockList.getNodeCount(); i++) {
 			
 				tempNode = stockList.getNodeAt(i);
 				
 				if (tempNode.getInstanceNum()>0) {
 				
-					//System.out.print(cnt + " ");
-					
+					// get the last trade value
 					tempLastTrade = fetcher.getLastTrade(tempNode.getTickerSymbol());
 					tempNode.setLastTrade(tempLastTrade);
 					  
-					  
+					// update the GUI
 					gui.setTickerandPrice(tempNode.getTickerSymbol(), tempLastTrade);			
 					System.out.print("\n" + new Timestamp(date.getTime()) + ", " + 
 											tempNode.getTickerSymbol()+": " + tempLastTrade + 
 											" [" + tempNode.getInstanceNum() + "]");		// instance number
-					
+
+					// write the last trade value to the respective text files
 					fio.writeToFile(
 							pathName + tempNode.getTickerSymbol() + ".txt", 
 							tempLastTrade);				
@@ -147,7 +146,9 @@ public class runPeriodicTask {
 	
 	private void setAndCheckPath() {
 		
-		String myOS = getOS.getOsName();
+		// obtain the working OS and set the pathname accordingly
+		
+		String myOS = getOS.getOsName();		
 		boolean hasError=false;
 		
 		if (myOS.equals("windows")) {
@@ -203,6 +204,9 @@ public class runPeriodicTask {
 
 	public void testThresholds(StockNode _stockNode) {
 
+		// test the high and low threshold values
+		// send an email if the current stock price is above the high threshold or below the low threshold.
+		
 		if (Double.parseDouble(_stockNode.getLastTrade()) < _stockNode.getThreshLow()) {
 			System.out.println("*** " + _stockNode.getTickerSymbol() + " is lower than low threshold. ***");
 
@@ -252,6 +256,7 @@ public class runPeriodicTask {
 	}
 
 	public void disableTickerSymbol(String tickerSymb) {
+		// this routine disables the ticker symbol by setting the instanceNum to -1*abs(instanceNum)
 		
 		// find the ticker symbol's node
 		StockNode disableNode = stockList.findTickerSymb(tickerSymb);
@@ -261,15 +266,15 @@ public class runPeriodicTask {
 			
     		StockNode currNode = stockList.findTickerSymb(tickerSymb); 
 			
-    		if (currNode.getInstanceNum() < 0) {
+    		if (currNode.getInstanceNum() < 0) {		// if the node is inactive
     			System.out.println(tickerSymb + " is already inactive.");
-    		} else {    			
-    			// set to -1*instance number (deactivate)
+    		} else {    								// if node is active 
+    													// set to -1*instance number (deactivate)
     			currNode.setInstanceNum(-1*Math.abs(currNode.getInstanceNum()));				
     			System.out.println("Removed ticker symbol " + tickerSymb);
 			}			
 			
-			// if no nodes are active, quit
+			// if no active ticker symbols in list, quit
 			if (!stockList.HasActiveInstanceNum()) {
 				System.out.println("No more active ticker symbols. Quitting...");
 				quit=true;
@@ -302,7 +307,10 @@ public class runPeriodicTask {
 	
 	public void drawChart(String tickerSymbol) {
 		
+		// Open the text file of the given tickerSymbol and draw a chart with that data
+		
 		StockNode tempNode = stockList.findTickerSymb(tickerSymbol);
+		
 		// if ticker symbol is in list, then draw chart 
 		if (tempNode != null) {		
 			System.out.println("tickerSymbol = " + tickerSymbol);
@@ -316,6 +324,9 @@ public class runPeriodicTask {
 	}
 	
 	public static void checkLibraries() {
+		
+		// check if the jcommon and jfreechart libraries are included (to create a chart)
+		// check if the javamail library is included (for email capabilities)
 		
 	    if (System.getProperty("java.class.path",null).contains("jcommon") &&
 	       (System.getProperty("java.class.path",null).contains("jfreechart"))) {

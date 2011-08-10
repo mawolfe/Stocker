@@ -63,12 +63,12 @@ public class Gui extends JFrame
 				{
 					System.out.println("\nStart clicked.");										
 									
-					if (guiErrorCount() == 0) {
+					if (guiErrorCount() == 0) {	// check for errors and proceed if there are none 
 						printGUIinfo();
 						buttons[0].setText("Add/Update");
 
 						if (getSize().height > 160) {removeGUIbuttons();}
-											
+							
 						rpt = new runPeriodicTask(Integer.parseInt(fields[1].getText()), 
 							fields[0].getText().toUpperCase(),
 							Double.parseDouble(fields[2].getText()),
@@ -86,10 +86,9 @@ public class Gui extends JFrame
 			{
 				public void actionPerformed(ActionEvent event)
 				{
-					//add action events
 					System.out.println("Stop clicked.\nQuitting...");					
 					rpt.quit=true;
-					System.exit(0);
+					System.exit(0);		// Quit
 				}
 			}
 		);
@@ -102,15 +101,13 @@ public class Gui extends JFrame
 			{
 				public void actionPerformed(ActionEvent event)
 				{
-					//add action events
 					System.out.println("\nRemove clicked.");
 					
-					// disable
+					// disable ticker symbol
 					rpt = new runPeriodicTask(fields[0].getText().toString().toUpperCase(),2);	
 				}
 			}
 		);
-		
 				
 		buttons[3] = new JButton("Email");
 		buttonJPanel.add(buttons[3]);
@@ -119,7 +116,6 @@ public class Gui extends JFrame
 			{
 				public void actionPerformed(ActionEvent event)
 				{
-					//add action events
 					System.out.println("\nEmail clicked.");
 
 					printGUIinfo();
@@ -127,10 +123,7 @@ public class Gui extends JFrame
 					String tickerSymbol = fields[0].getText().toUpperCase();
 					String lastTrade = runPeriodicTask.fetcher.getLastTrade(fields[0].getText());
 					
-					//String to[] = null; 
-					//		to [0] = (fields[4].getText());
 					String to = fields[4].getText();
-					//String pw = fields[5].getText();
 					String pw = password.getText();
 
 					String subject = tickerSymbol + " " + lastTrade;
@@ -141,8 +134,7 @@ public class Gui extends JFrame
 						"\nLast trade:    " + lastTrade +
 						"\n\n*** Automatically generated message from Stocker. Stocker Email Button Pushed ***";
 
-					email = new Email(to, pw, subject, message);
-									
+					email = new Email(to, pw, subject, message);		// send email									
 				}
 			}
 		);

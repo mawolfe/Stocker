@@ -10,6 +10,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 public class StockNode {
 
+	// Each node contains a place holder for a ticker Symbol, last trade value, low threshold, high threshold,
+	// instance number, emailed fields, and a pointer to the next node
+	
 	private String tickerSymbol, lastTrade;
     private double threshLow, threshHigh; 
     private int instanceNum;
@@ -27,6 +30,7 @@ public class StockNode {
 
     public StockNode getNext() { return next; }
     
+    // Getters
     public String getTickerSymbol() { return tickerSymbol;}    
     public String getLastTrade()    { return lastTrade;}   
     public double getThreshLow()    { return threshLow;}
@@ -34,6 +38,7 @@ public class StockNode {
     public int getInstanceNum()     { return instanceNum;}
     public boolean getEmailed()     { return emailed;}
            
+    // Setters
     public void setTickerSymbol(String in) { tickerSymbol = in; }    
     public void setLastTrade(String in)    { lastTrade = in;    }
     public void setThreshLow(double in)    { threshLow = in;    }

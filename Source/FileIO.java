@@ -17,18 +17,16 @@ import java.io.IOException;
 public class FileIO {
     
 	public void writeToFile(String filename, String writeThis) {
-        
+		// Write the writeThis string to the filename text file
+
         BufferedWriter bufferedWriter = null;
         
-        try {
-            
+        try {            
             //Construct the BufferedWriter object
             bufferedWriter = new BufferedWriter(new FileWriter(filename, true));
             
             //Start writing to the output stream
             bufferedWriter.write(writeThis + "\n");
-            //bufferedWriter.newLine();
-            //bufferedWriter.write("Writing line two to file");
             
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();

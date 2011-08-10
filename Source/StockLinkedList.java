@@ -8,11 +8,12 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+
 public class StockLinkedList {
     
     private StockNode head = null;
     
-public void addStock(String tickerSymbol, double threshLow, double threshHigh, int instanceNum) {    
+    public void addStock(String tickerSymbol, double threshLow, double threshHigh, int instanceNum) {    
         
     	// if ticker symbol does not exist, add ticker symbol
     	if (findTickerSymb(tickerSymbol)==null) {
@@ -29,12 +30,14 @@ public void addStock(String tickerSymbol, double threshLow, double threshHigh, i
     		
     		StockNode currNode = findTickerSymb(tickerSymbol); 
 
+    		// set/update threshold values
     		currNode.setThreshLow(threshLow); 
     		currNode.setThreshHigh(threshHigh); 
     		currNode.setEmailed(false);
 
-    		if (currNode.getInstanceNum() < 0) {
-        		currNode.setInstanceNum(Math.abs(currNode.getInstanceNum()));		 
+    		if (currNode.getInstanceNum() < 0) {								// if node is inactive
+        		currNode.setInstanceNum(Math.abs(currNode.getInstanceNum()));	// set instance number to abs(instanceNum) to activate 
+        																		// (a positive instanceNum is active, negative is not)	 
 
     			System.out.println(tickerSymbol + " reactivated.");
 
@@ -47,6 +50,8 @@ public void addStock(String tickerSymbol, double threshLow, double threshHigh, i
     public StockNode getHead() {return head;}
     
     public int getNodeCount() {
+
+    	// count the nodes in the linked list
     	
     	int cnt=0;
     	StockNode current = head; 
@@ -60,6 +65,9 @@ public void addStock(String tickerSymbol, double threshLow, double threshHigh, i
     }
     
     public StockNode getNodeAt(int index) {
+    	
+    	// get a handle on the specified node number    
+    	
         StockNode current = head;    // handle to the head node
         
     	while(index > 0) {
@@ -70,6 +78,8 @@ public void addStock(String tickerSymbol, double threshLow, double threshHigh, i
     }
 
     public StockNode findTickerSymb(String tickerSymb) {
+    	
+    	// find if the specified tickerSymb exists in the linked list
     	
     	StockNode current = head;    // handle to the head node
 
@@ -85,6 +95,8 @@ public void addStock(String tickerSymbol, double threshLow, double threshHigh, i
 
     public boolean HasActiveInstanceNum() {
 
+    	// check is there is an active node in the linked list. 
+    	
     	StockNode current = head;    // handle to the head node
 
         while(current != null) {
