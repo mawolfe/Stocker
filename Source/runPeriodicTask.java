@@ -163,7 +163,11 @@ public class runPeriodicTask {
 				hasError=true;
 				System.out.println("\nError: The following Windows path cannot be found:\n" +
 									"\t" + pathNameWindows + "\n" +
-									"Set the pathNameWindows variable in runPeriodicTask.java.");				
+									"Set the pathNameWindows variable in runPeriodicTask.java.");
+				JOptionPane.showMessageDialog(null,
+						"The following Windows path cannot be found:\n\t" + pathNameWindows + "\n" +,
+					    "Can't Find Windows Path",
+					    JOptionPane.ERROR_MESSAGE);
 			}
 			
 	    } else if (myOS.equals("linux")) {
@@ -178,7 +182,11 @@ public class runPeriodicTask {
 				hasError=true;
 				System.out.println("\nError: The following Linux path cannot be found:\n" +
 						"\t" + pathNameLinux + "\n" +
-						"Set the pathNameLinux variable in runPeriodicTask.java.");				
+						"Set the pathNameLinux variable in runPeriodicTask.java.");
+				JOptionPane.showMessageDialog(null,
+						"The following Linux path cannot be found:\n\t" + pathNameLinux + "\n" +,
+					    "Can't Find Linux Path",
+					    JOptionPane.ERROR_MESSAGE);
 			}					
 			
 	    } else if (myOS.equals("mac")){
@@ -194,6 +202,10 @@ public class runPeriodicTask {
 				System.out.println("\nError: The following Mac path cannot be found:\n" +
 						"\t" + pathNameMac + "\n" +
 						"Set the pathNameMac variable in runPeriodicTask.java.");				
+				JOptionPane.showMessageDialog(null,
+						"The following Mac path cannot be found:\n\t" + pathNameMac + "\n" +,
+					    "Can't Find Mac Path",
+					    JOptionPane.ERROR_MESSAGE);
 			}					
 	    } else {
 	    	System.out.println(myOS + " operating system not supported.");	    	

@@ -265,7 +265,6 @@ public class Gui extends JFrame
 				    "Ticker symbol is empty. Enter a ticker symbol.",
 				    "Ticker Symbol",
 				    JOptionPane.ERROR_MESSAGE);
-
 		}
 		
 		try {
