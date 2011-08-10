@@ -14,15 +14,4 @@ Stocker Description
 Stocker is  a stock alert application built in Java.  Using this program, you can monitor various stocks and set high and low threshold values, so when a specific stock goes outside its specified range, you will be alerted with an email.
 
 
-To allow this to email the user updates two packages had to be downloaded that do not come by default with Java.  These are the JavaMail and JAF and can be downloaded from Java's standard website.  You will need to download and unzip these files.  From these files you will need to find the mail.jar and activation.jar files and copy them into your CLASSPATH.  On my Mac it was at
-Apple/System/Library/Framework/JavaVM.framework/Version/1.5.0/Classes
-
-The way the code is now the user will need to open runPeriodicTask and change the location that the file is saved to.
-
-Gmail is the only email client service that will work.  Yahoo needed an upgraded version and Hotmail had some issues. 
-
-This is the link at oracle for javamail.
-http://www.oracle.com/technetwork/java/javamail-138606.html
-
-And the Javamail FAQ is here
-http://www.oracle.com/technetwork/java/faq-135477.html#ossup
+For help with setup and troubleshooting see the documents in the Docs folder.  The Docs folder has directions for how things work as they stand now.  There are also current links to helpful websites if further assistance is needed.
