@@ -14,6 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class runPeriodicTask {
 
@@ -165,7 +166,7 @@ public class runPeriodicTask {
 									"\t" + pathNameWindows + "\n" +
 									"Set the pathNameWindows variable in runPeriodicTask.java.");
 				JOptionPane.showMessageDialog(null,
-						"The following Windows path cannot be found:\n\t" + pathNameWindows + "\n" +,
+						"The following Windows path cannot be found:\n\t" + pathNameWindows + "\n",
 					    "Can't Find Windows Path",
 					    JOptionPane.ERROR_MESSAGE);
 			}
@@ -184,7 +185,7 @@ public class runPeriodicTask {
 						"\t" + pathNameLinux + "\n" +
 						"Set the pathNameLinux variable in runPeriodicTask.java.");
 				JOptionPane.showMessageDialog(null,
-						"The following Linux path cannot be found:\n\t" + pathNameLinux + "\n" +,
+						"The following Linux path cannot be found:\n\t" + pathNameLinux + "\n",
 					    "Can't Find Linux Path",
 					    JOptionPane.ERROR_MESSAGE);
 			}					
@@ -203,7 +204,7 @@ public class runPeriodicTask {
 						"\t" + pathNameMac + "\n" +
 						"Set the pathNameMac variable in runPeriodicTask.java.");				
 				JOptionPane.showMessageDialog(null,
-						"The following Mac path cannot be found:\n\t" + pathNameMac + "\n" +,
+						"The following Mac path cannot be found:\n\t" + pathNameMac + "\n",
 					    "Can't Find Mac Path",
 					    JOptionPane.ERROR_MESSAGE);
 			}					

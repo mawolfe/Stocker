@@ -64,11 +64,23 @@ public class Gui extends JFrame
 					System.out.println("\nStart clicked.");										
 									
 					if (guiErrorCount() == 0) {	// check for errors and proceed if there are none 
-						printGUIinfo();
+
 						buttons[0].setText("Add/Update");
 
 						if (getSize().height > 160) {removeGUIbuttons();}
 							
+						double high = Double.parseDouble(fields[2].getText());
+                        double low = Double.parseDouble(fields[3].getText());
+                        if(high < low){
+                                double temp = low;
+                                low = high;
+                                high = temp;
+                                fields[2].setText(Double.toString(high));
+                                fields[3].setText(Double.toString(low));
+                        }
+
+                        printGUIinfo();
+
 						rpt = new runPeriodicTask(Integer.parseInt(fields[1].getText()), 
 							fields[0].getText().toUpperCase(),
 							Double.parseDouble(fields[2].getText()),
@@ -257,14 +269,12 @@ public class Gui extends JFrame
 
 	private int guiErrorCount() {
 		int errorCount=0;
+		String errorString="";
 		
 		if (fields[0].getText().isEmpty()) {
 			System.out.println("Error: Ticker symbol is empty. Enter a ticker symbol.");
 			errorCount++;
-			JOptionPane.showMessageDialog(null,
-				    "Ticker symbol is empty. Enter a ticker symbol.",
-				    "Ticker Symbol",
-				    JOptionPane.ERROR_MESSAGE);
+			errorString=errorString+"Ticker symbol is empty. Enter a ticker symbol.\n";
 		}
 		
 		try {
@@ -273,11 +283,7 @@ public class Gui extends JFrame
 		} catch (NumberFormatException nfe) {
 			System.out.println("Error: Refresh Rate requires an integer.");
 			errorCount++;
-			JOptionPane.showMessageDialog(null,
-				    "Refresh rate requires an integer.",
-				    "Refresh rate",
-				    JOptionPane.ERROR_MESSAGE);
-
+			errorString=errorString+"Refresh rate requires an integer.\n";
 		}
 		try {
 			Double.parseDouble(fields[2].getText());
@@ -285,10 +291,7 @@ public class Gui extends JFrame
 		} catch (NumberFormatException nfe) {
 			System.out.println("Error: High Threshold requires a double.");
 			errorCount++;
-			JOptionPane.showMessageDialog(null,
-				    "High Threshold requires a double.",
-				    "High Threshold",
-				    JOptionPane.ERROR_MESSAGE);
+			errorString=errorString+"High Threshold requires a double.\n";
 		}
 		try {
 			Double.parseDouble(fields[3].getText());
@@ -296,14 +299,17 @@ public class Gui extends JFrame
 		} catch (NumberFormatException nfe) {
 			System.out.println("Error: Low Threshold requires a double.");
 			errorCount++;
-			JOptionPane.showMessageDialog(null,
-				    "Low Threshold requires a double.",
-				    "Low Threshold",
-				    JOptionPane.ERROR_MESSAGE);
+			errorString=errorString+"Low Threshold requires a double.\n";
 		}
 		
 		// fields[4].getText(); 	  // email
 		// pw = fields[5].getText();  // pwd
+		if (errorCount != 0) {
+			JOptionPane.showMessageDialog(null,
+					errorString,
+				    errorCount + " Errors",
+				    JOptionPane.ERROR_MESSAGE);
+		}
 		
 		return errorCount;
 	}
