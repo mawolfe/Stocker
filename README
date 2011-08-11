@@ -10,13 +10,15 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Stocker Description
+
+STOCKER DESCRIPTION
 
 Stocker is  a stock alert application built in Java.  Using this program, you can monitor various stocks and set high and low threshold values, so when a specific stock goes outside its specified range, you will be alerted with an email.
 
-
 For help with setup and troubleshooting see the documents in the Docs folder.  The Docs folder has directions for how things work as they stand now.  There are also current links to helpful websites if further assistance is needed.
 
-Contact Info
+
+CONTACT INFO
+
 Matthew Wolfe at: mawolfe@pdx.edu
 Andy Gospodnetich at: agospodn@pdx.edu
